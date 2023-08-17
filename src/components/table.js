@@ -1,15 +1,41 @@
-import React, { Component } from "react";
+import React, { useState,useEffect } from "react";
 import "@popperjs/core";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Reservation.css';
 import Radio from './radio';
 import RadioGroup from './radioGroup';
 import './table.css';
+import axios from "axios";
 
-class Table extends React.Component{
+function Table ({ showDetails }){
+    const [fetchedData, setFetchedData] = useState(false);
+    const [tableData, setTableData] = useState({});
+  
+    useEffect(() => {
+        if (showDetails && !fetchedData) {
+          // 데이터 요청
+          const reservationId = 11;
+          const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb3PthqDtgbAiLCJpZCI6MiwiZXhwIjoxNjkyNzg1ODEzLCJ1c2VybmFtZSI6Im5hdmVyX1BPbXlOMlNCSndaUmNXbXNUak05YWR6WnNrQ1Qta1Jxd0lick1STHI2LWsifQ.ndm6Q9GkjJZiwkXZae8VV5QDP7ydWp7YBN-ECVyQDWBe0OTwbecCkA11ebrqrrgEw-zqK1p0JHl16F1yz8Pu-g'; // 토큰 추가
+          axios({
+            method: 'GET',
+            url: '/booking/details/{reservationId}',
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+            .then(response => {
+              setTableData(response.data);
+              setFetchedData(true);
+              console.log('성공:', response.data);
+            })
+            .catch(error => {
+              console.error('에러 발생:', error);
+            });
+        }
+      }, [showDetails, fetchedData]);
 
-    render(){
-        const className = this.props.page === 1 ? 'page-one' : 'page-two';
+
+        // const className = this.props.page === 1 ? 'page-one' : 'page-two';
         //페이지1=고객 페이지2=업체 즉
         return(
                 <div className="table_box my-component ${className}">
@@ -74,7 +100,7 @@ class Table extends React.Component{
                 </div>
 
         )
-    }
+    
         
 }
 
