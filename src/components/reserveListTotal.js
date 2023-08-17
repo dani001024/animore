@@ -1,65 +1,65 @@
 //예약내역1
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import ReservationList from "./ReservaionList";
 import './reserveListTotal.css';
 
-const list = {
-    'date':'07.04. 13:00',
-    'shop':'봉봉살롱',
-    'address':'부산광역시',
-    'telephone':'010-0000-0000'
-}
 
 function ReserveListTotal() {
-    return (
-      <div className="main_T">
-        <p className="listTitle">예약내역</p> 
-        <div className="rowlinePage1"></div>  
-        <div className="colPage1">
-            <p className="tile">예약일자</p>
-            <p className="tile">매장명</p>
-            <p className="tile">매장 주소</p>
-            <p className="tile">매장 연락처</p>
-            <p className="tile">예약상세</p>
-        </div>  
-        <ReservationList page={1}
-        date ={list.date}
-        shop = {list.shop}
-        address = {list.address}
-        telephone = {list.telephone}
-        />
-        <ReservationList  page={1}
-        date ={list.date}
-        shop = {list.shop}
-        address = {list.address}
-        telephone = {list.telephone}
-        />
-        <ReservationList  page={1}
-        date ={list.date}
-        shop = {list.shop}
-        address = {list.address}
-        telephone = {list.telephone}
-        />
-        <ReservationList  page={1}
-        date ={list.date}
-        shop = {list.shop}
-        address = {list.address}
-        telephone = {list.telephone}
-        />
-        <ReservationList  page={1}
-        date ={list.date}
-        shop = {list.shop}
-        address = {list.address}
-        telephone = {list.telephone}
-        />
-        <ReservationList  page={1}
-        date ={list.date}
-        shop = {list.shop}
-        address = {list.address}
-        telephone = {list.telephone}
-        />
+  const [data, setData] = useState({});
+  const [showDetails, setShowDetails] = useState(false);
+  const [fetchedData, setFetchedData] = useState(false); // 상태 추가
+
+  useEffect(() => {
+    if (!fetchedData) {
+      // fetchedData 상태가 false일 때만 요청 보냄 (새로고침 할때)
+      const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb3PthqDtgbAiLCJpZCI6MiwiZXhwIjoxNjkyNzg1ODEzLCJ1c2VybmFtZSI6Im5hdmVyX1BPbXlOMlNCSndaUmNXbXNUak05YWR6WnNrQ1Qta1Jxd0lick1STHI2LWsifQ.ndm6Q9GkjJZiwkXZae8VV5QDP7ydWp7YBN-ECVyQDWBe0OTwbecCkA11ebrqrrgEw-zqK1p0JHl16F1yz8Pu-g'; // 토큰 추가
+
+      axios({
+        method: 'GET',
+        url: '/my/booking/visit',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+        .then(response => {
+          setData(response.data);
+          setShowDetails(true);
+          setFetchedData(true); // fetchedData 상태를 true로 변경
+          console.log('성공:', response.data);
+        })
+        .catch(error => {
+          console.error('에러 발생:', error);
+        });
+    }
+  }, [fetchedData]);
+
+  return (
+    <div className="main_T">
+
+      <p className="listTitle">예약내역</p>
+      <div className="rowlinePage1"></div>
+      <div className="colPage1">
+        <p className="tile">예약일자</p>
+        <p className="tile">매장명</p>
+        <p className="tile">매장 주소</p>
+        <p className="tile">매장 연락처</p>
+        <p className="tile">예약상세</p>
       </div>
-    );
-   }
-  
-  export default ReserveListTotal;
+      <div>
+        {data.result && data.result.map((item, index) => (
+          <ReservationList
+            key={index}
+            page={1}
+            date={item.startTime}
+            shop={item.storeName}
+            address={item.storeLocation}
+            telephone={item.storeNumber}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default ReserveListTotal;
