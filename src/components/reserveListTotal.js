@@ -13,7 +13,7 @@ function ReserveListTotal() {
   useEffect(() => {
     if (!fetchedData) {
       // fetchedData 상태가 false일 때만 요청 보냄 (새로고침 할때)
-      const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb3PthqDtgbAiLCJpZCI6MiwiZXhwIjoxNjkyNzg1ODEzLCJ1c2VybmFtZSI6Im5hdmVyX1BPbXlOMlNCSndaUmNXbXNUak05YWR6WnNrQ1Qta1Jxd0lick1STHI2LWsifQ.ndm6Q9GkjJZiwkXZae8VV5QDP7ydWp7YBN-ECVyQDWBe0OTwbecCkA11ebrqrrgEw-zqK1p0JHl16F1yz8Pu-g'; // 토큰 추가
+      const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb3PthqDtgbAiLCJpZCI6NCwiZXhwIjoxNjkyNzYxMDA0LCJ1c2VybmFtZSI6Imdvb2dsZV8xMDg1OTYwMzM2NDczMDk5ODQ3ODUifQ.uBYZMFGYe2wq6w3LzO1TPdmg6evnMtEZGQHmSszo8yaqUtGeraBjeA-YQepR5pQn1Mi_IqkMWPOFGdMTI47EFA'; // 토큰 추가
 
       axios({
         method: 'GET',
@@ -55,6 +55,7 @@ function ReserveListTotal() {
             shop={item.storeName}
             address={item.storeLocation}
             telephone={item.storeNumber}
+            reservationId={item.reservationId}
           />
         ))}
       </div>

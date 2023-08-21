@@ -1,10 +1,11 @@
-import React from "react";
+//예약요청
+import React, { useState,useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ReservationList.css';
 import './watingList.css';
 import "@popperjs/core";
 import ShopReservationList from "./shopReservationList"; 
-
+import axios from "axios";
 
 const waitinglist = {
     'date':'07.04. 13:00',
@@ -13,76 +14,67 @@ const waitinglist = {
     'telephone':'010-0000-0000'
 }
 
-class WaitingList extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-          showDetails: false
-        };
+function WaitingList() {
+    const [showDetails, setShowDetails] = useState(false);
+    const [data, setData] = useState([]);
+    const [fetchedData, setFetchedData] = useState(false); // 상태 추가
+  
+    useEffect(() => {
+      if (!fetchedData) {  // fetchedData 상태가 false일 때만 요청 보냄 (새로고침 할때)
+        const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb3PthqDtgbAiLCJpZCI6MSwiZXhwIjoxNjkyNzYwOTc3LCJ1c2VybmFtZSI6Imtha2FvXzI4OTgyMDI5NDQifQ.4nPXZqpCskQGhYwhytA4F1pS9U0DK9sTTOMTx7wTVBGDOmiF52RQQODkLWPcgJOyP2pGUEeTnF_04RVXukYb7g'; // 토큰 추가
+  
+        axios({
+          method: 'GET',
+          url: '/manage/bookings/requests',
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+          .then(response => {
+            if (response.data.isSuccess) {
+              setData(response.data.result);
+              setShowDetails(true);
+              setFetchedData(true);
+              console.log('성공:', response.data);
+            } else {
+              console.error('에러 메시지:', response.data.message);
+            }
+          })
+          .catch(error => {
+            console.error('에러 발생:', error);
+          });
       }
-    handleDetailsClick = () => {
-        this.setState((prevState) => ({
-          showDetails: !prevState.showDetails
-        }));
-      };
-    render(){
-        return(
-            <div className="wationgBox">
-                <div className="waiting">예약요청</div>
-                <div className="rowline"></div>  
-                <div className="colPage2">
-                    <p className="tile title1">예약일자</p>
-                    <p className="tile">반려동물이름</p>
-                    <p className="tile">보호자 이름</p>
-                    <p className="tile">보호자 연락처</p>
-                    <p className="tile title5">예약상세</p>
-                </div>
-                <div>
-                  <ShopReservationList 
-                date ={waitinglist.date}
-                shop = {waitinglist.shop}
-                address = {waitinglist.address}
-                telephone = {waitinglist.telephone}
-                />
-                <ShopReservationList 
-                date ={waitinglist.date}
-                shop = {waitinglist.shop}
-                address = {waitinglist.address}
-                telephone = {waitinglist.telephone}
-                />
-                <ShopReservationList 
-                date ={waitinglist.date}
-                shop = {waitinglist.shop}
-                address = {waitinglist.address}
-                telephone = {waitinglist.telephone}
-                />
-                <ShopReservationList 
-                date ={waitinglist.date}
-                shop = {waitinglist.shop}
-                address = {waitinglist.address}
-                telephone = {waitinglist.telephone}
-                />
-                <ShopReservationList 
-                date ={waitinglist.date}
-                shop = {waitinglist.shop}
-                address = {waitinglist.address}
-                telephone = {waitinglist.telephone}
-                />
-                <ShopReservationList 
-                date ={waitinglist.date}
-                shop = {waitinglist.shop}
-                address = {waitinglist.address}
-                telephone = {waitinglist.telephone}
-                />
-                </div> 
-                
+    }, [fetchedData]);
 
-            </div>           
-        )
-    
-    }
-        
+    // const handleDetailsClick = () => {
+    //     setShowDetails(prevShowDetails => !prevShowDetails);
+    // };
+
+    return (
+        <div className="wationgBox">
+            <div className="waiting">예약요청</div>
+            <div className="rowline"></div>  
+            <div className="colPage2">
+                <p className="tile title1">예약일자</p>
+                <p className="tile">반려동물이름</p>
+                <p className="tile">보호자 이름</p>
+                <p className="tile">보호자 연락처</p>
+                <p className="tile title5">예약상세</p>
+            </div>
+            <div>
+        {data.map((item, index) => (
+          <ShopReservationList
+            key={index}
+            page={2} 
+            startTime={item.startTime}
+            petName={item.petName}
+            username={item.username}
+            phone={item.phone}
+          />
+        ))}
+      </div> 
+        </div>           
+    );
 }
+
 export default WaitingList;
-
-

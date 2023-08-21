@@ -39,24 +39,3 @@ class ManageSys extends React.Component {
   }
   
   export default ManageSys;
-
-
-// class ManageSys extends React.Component{
-//     handleItemClick = (url) => {
-//         // URL에 따른 작업 수행
-
-//       };
-    
-//     render(){
-//         return(
-//             <div className="Manager" style={{display:"flex"}}>
-//                 <Adminpagemenu  handleItemClick={this.handleItemClick}/>
-//                 <WaitingList onClick={this.handleItemClick}/>
-//                 <FixedList/>
-//             </div>           
-//         )
-    
-//     }
-        
-// }
-// export default ManageSys;

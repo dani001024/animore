@@ -27,9 +27,8 @@ function App() {
         <Menubar/>
         <Reservation/>
         <FinalPage/>
-        <SelectPage/>
+         <SelectPage/>
         <ReserveListTotal/>
-
 
         <ManageSys/>
 

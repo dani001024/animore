@@ -1,24 +1,24 @@
 // 예약상세3 - 시간선택
-import React,{useState} from 'react';
-// import 'bootstrap/dist/css/bootstrap.min.css';
-import './timeSelect.css'
+import React, { useState } from 'react';
+import './timeSelect.css';
 
-const TimeSelect = () => {
-  const [isSelected, selectTime] = useState(Array(10).fill(false));
+const TimeSelect = ({ isSelectedTime, onClick }) => {
+  const [selectedButtonIndex, setSelectedButtonIndex] = useState(null);
 
-  const onClick = (index) => {
-    const updatedSelected = Array(10).fill(false);
-    updatedSelected[index] = true;
-    selectTime(updatedSelected);
+  const handleButtonClick = (index) => {
+    setSelectedButtonIndex(index);
+    onClick(index);
   };
 
   return (
     <div className="TimeButtonContainer">
-      {isSelected.map((selected, index) => (
+      {isSelectedTime.map((selected, index) => (
         <button
           key={index}
-          className={`Timebtn ${selected ? 'selected-time' : 'Timebtn'}`}
-          onClick={() => onClick(index)}
+          className={`Timebtn ${selectedButtonIndex === index ? 'selected-time' : ''}`}
+          onClick={() => {
+            handleButtonClick(index);
+          }}
         >
           {index + 11}:00
         </button>
@@ -29,40 +29,31 @@ const TimeSelect = () => {
 
 export default TimeSelect;
 
-// function TimeSelect() {
-//   const [isSelected, selectTime] = useState(false);
-
-//     const onClick = () => {
-//       selectTime(prev => !prev); // isSelected 상태를 토글 (true -> false, false -> true)
-//     };
-  
-  
-//     return (
-//       <div id='time'>
-//         <div className='firstRow'>
-//         <button className={`Timebtn ${isSelected ? 'selected-time' : 'Timebtn'}`}
-//                 onClick={onClick}>11:00</button>
-//         </div>
-//         <div>
-//         <button className='Timebtn'>12:00</button>
-//         <button className='Timebtn'>13:00</button>
-//         <button className='Timebtn'>14:00</button>
-//         </div>
-//         <div>
-//         <button className='Timebtn'>15:00</button>
-//         <button className='Timebtn'>16:00</button>
-//         <button className='Timebtn'>17:00</button>
-//         </div>
-//         <div>
-//         <button className='Timebtn'>18:00</button>
-//         <button className='Timebtn'>19:00</button>
-//         <button className='Timebtn'>20:00</button>
-//         </div>
 
 
-//       </div>
-      
-//     );
 
-//   }
-//   export default TimeSelect;
+
+//값 전달하는거 구현완료된거
+// import React from 'react';
+// import './timeSelect.css';
+
+// const TimeSelect = ({ isSelectedTime, onClick }) => {
+//   return (
+//     <div className="TimeButtonContainer">
+//       {isSelectedTime.map((selected, index) => (
+//         <button
+//           key={index}
+//           className={`Timebtn ${selected ? 'selected-time' : 'Timebtn'}`}
+//           onClick={() => {
+//             onClick(index);
+           
+//           }}
+//         >
+//           {index + 11}:00
+//         </button>
+//       ))}
+//     </div>
+//   );
+// };
+
+// export default TimeSelect;
